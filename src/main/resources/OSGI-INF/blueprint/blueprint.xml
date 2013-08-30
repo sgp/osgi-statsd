@@ -1,0 +1,24 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+           xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.0.0.xsd">
+    <description>OSGi StatsD Client</description>
+
+    <cm:property-placeholder persistent-id="net.snortasprocket.osgi.statsd">
+        <cm:default-properties>
+            <cm:property name="statsd.prefix"  value="osgi_statsd" />
+            <cm:property name="statsd.host" value="localhost" />
+            <cm:property name="statsd.port" value="8125" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="statsdClient" class="com.timgroup.statsd.NonBlockingStatsDClient">
+        <argument value="${statsd.prefix}" />
+        <argument value="${statsd.host}" />
+        <argument value="${statsd.port}" />
+    </bean>
+    <service ref="statsdClient" interface="com.timgroup.statsd.StatsDClient" />
+
+</blueprint>
